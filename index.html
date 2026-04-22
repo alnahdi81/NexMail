@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بريد مؤقت - NexMail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        /* AD SLOTS */
+        .ad-section {
+            width: 100%;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .ad-section::before {
+            content: 'إعلان';
+            position: absolute;
+            top: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.6rem;
+            color: var(--gray);
+            background: rgba(255,255,255,0.9);
+            padding: 0 0.4rem;
+            border-radius: 3px;
+            z-index: 1;
+        }
+
+        .ad-top { min-height: 90px; padding: 0.5rem; border-bottom: 1px solid var(--border); }
+        .ad-under-header { min-height: 100px; margin: 1.5rem 0; border-radius: 12px; }
+        .ad-middle { min-height: 250px; margin: 1.5rem 0; border-radius: 12px; }
+        .ad-inbox-bottom { min-height: 90px; margin-top: 1rem; border-radius: 8px; }
+        .ad-footer { min-height: 90px; padding: 0.5rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+
+        /* Navigation */
+        .main-nav {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 0 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .mobile-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem 2rem;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin: 2rem 0;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p { opacity: 0.9; }
+
+        /* Email Card */
+        .email-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .email-display {
+            background: linear-gradient(135deg, var(--light), #eef2ff);
+            border: 2px dashed var(--primary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .email-address {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            word-break: break-all;
+            direction: ltr;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .email-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-outline { background: white; color: var(--dark); border: 2px solid var(--border); }
+
+        /* Inbox */
+        .inbox-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .inbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .refresh-btn {
+            background: var(--light);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover { background: var(--primary); color: white; }
+        .refresh-btn.spinning i { animation: spin 1s linear infinite; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Email List - ALL MESSAGES VISIBLE */
+        .email-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: none;
+            overflow: visible;
+        }
+
+        .email-item {
+            background: var(--light);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .email-item:hover {
+            border-color: var(--primary);
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .email-item.unread::before {
+            content: '';
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 10px;
+            height: 10px;
+            background: var(--danger);
+            border-radius: 50%;
+        }
+
+        .email-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .sender-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sender-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .sender-details { min-width: 0; }
+        .sender-details h4 { font-size: 1rem; margin-bottom: 0.2rem; }
+        .sender-details span { color: var(--gray); font-size: 0.85rem; }
+
+        .email-time {
+            color: var(--gray);
+            font-size: 0.85rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .email-subject {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            color: var(--dark);
+            word-break: break-word;
+        }
+
+        .email-preview {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .tag-small {
+            padding: 0.2rem 0.6rem;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .tag-small.verification {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--border);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--light);
+        }
+
+        .modal-body { padding: 2rem; }
+
+        .email-meta {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--light);
+            border-radius: 12px;
+        }
+
+        .email-meta-label { color: var(--gray); font-weight: 700; }
+
+        .verification-code {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 1.5rem 0;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: 0.5rem;
+            font-family: monospace;
+        }
+
+        .close-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .close-btn:hover { background: var(--danger); color: white; }
+
+        /* Content Pages */
+        .content-page {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .content-page.active { display: block; }
+
+        .content-page h1 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .content-page h2 { font-size: 1.2rem; margin: 1.5rem 0 1rem; }
+        .content-page p, .content-page li { color: var(--gray); line-height: 1.8; margin-bottom: 0.8rem; }
+        .content-page ul { margin-right: 2rem; margin-bottom: 1rem; }
+        .content-page a { color: var(--primary); text-decoration: none; font-weight: 700; }
+
+        /* Contact Form */
+        .contact-form .form-group { margin-bottom: 1.5rem; }
+        .contact-form label { display: block; margin-bottom: 0.5rem; font-weight: 700; }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Tajawal';
+            font-size: 1rem;
+        }
+        .contact-form textarea { min-height: 120px; resize: vertical; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--dark);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            z-index: 3000;
+            transition: all 0.3s;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { background: var(--success); }
+
+        /* Footer */
+        .main-footer {
+            background: var(--dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .main-footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            margin: 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        .main-footer a:hover { color: white; }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+        }
+
+        .loading-state i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                left: 0;
+                background: white;
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links.show { display: flex; }
+            .mobile-toggle { display: block; }
+            .container { padding: 0 1rem 1rem; }
+            .email-actions { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+            .email-item-header { flex-direction: column; gap: 0.5rem; }
+            .email-time { align-self: flex-end; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AD SLOT 1: TOP -->
+    <div class="ad-section ad-top">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:728px;height:90px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-content">
+            <a href="#" class="nav-logo" onclick="showPage('home')">
+                <i class="fas fa-envelope-open-text"></i>
+                NexMail
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" onclick="showPage('home')">الرئيسية</a></li>
+                <li><a href="#" onclick="showPage('privacy')">الخصوصية</a></li>
+                <li><a href="#" onclick="showPage('contact')">اتصل بنا</a></li>
+            </ul>
+            <div class="mobile-toggle" onclick="toggleMobileNav()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page-section">
+        <div class="container">
+            <div class="header">
+                <h1>بريد مؤقت</h1>
+                <p>بريد وهمي فوري لاستلام رسائل التحقق</p>
+            </div>
+
+            <!-- AD SLOT 2: UNDER HEADER -->
+            <div class="ad-section ad-under-header">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <div class="email-card">
+                <div class="email-display">
+                    <div class="email-address" id="emailAddress">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        جاري التحميل...
+                    </div>
+                </div>
+                
+                <div class="email-actions">
+                    <button class="btn btn-primary" onclick="copyEmail()">
+                        <i class="fas fa-copy"></i> نسخ
+                    </button>
+                    <button class="btn btn-success" onclick="generateNewEmail()">
+                        <i class="fas fa-sync-alt"></i> جديد
+                    </button>
+                    <button class="btn btn-outline" onclick="refreshInbox()">
+                        <i class="fas fa-redo"></i> تحديث
+                    </button>
+                </div>
+            </div>
+
+            <!-- AD SLOT 3: MIDDLE -->
+            <div class="ad-section ad-middle">
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:336px;height:280px"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+
+            <div class="inbox-card">
+                <div class="inbox-header">
+                    <h2>
+                        <i class="fas fa-inbox"></i>
+                        صندوق الوارد
+                        <span class="badge" id="emailCount">0</span>
+                    </h2>
+                    <button class="refresh-btn" id="refreshBtn" onclick="refreshInbox()">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+
+                <!-- ALL EMAILS WILL SHOW HERE - NO LIMIT -->
+                <div class="email-list" id="emailList">
+                    <div class="loading-state">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <p>جاري تحميل الرسائل...</p>
+                    </div>
+                </div>
+
+                <!-- AD SLOT 4: INBOX BOTTOM -->
+                <div class="ad-section ad-inbox-bottom">
+                    <ins class="adsbygoogle"
+                         style="display:inline-block;width:728px;height:90px"
+                         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                         data-ad-slot="XXXXXXXXXX"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRIVACY PAGE -->
+    <div id="page-privacy" class="content-page">
+        <div class="container">
+            <h1><i class="fas fa-shield-alt"></i> سياسة الخصوصية</h1>
+            
+            <p>نحن نحترم خصوصيتك. لا نجمع بياناتك الشخصية ولا نشاركها مع أطراف ثالثة.</p>
+
+            <h2>البيانات التي نستخدمها</h2>
+            <ul>
+                <li>عنوان البريد المؤقت المُنشأ تلقائياً</li>
+                <li>الرسائل المستلمة مؤقتاً فقط</li>
+                <li>لا نطلب اسمك أو بريدك الحقيقي</li>
+            </ul>
+
+            <h2>الأمان</h2>
+            <p>جميع البيانات مؤقتة وتحذف تلقائياً. نستخدم اتصالاً مشفراً (HTTPS) لحماية معلوماتك.</p>
+
+        
+        </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="page-contact" class="content-page">
+        <div class="container">
+            <h1><i class="fas fa-envelope"></i> اتصل بنا</h1>
+            
+            <form class="contact-form" onsubmit="handleContact(event)">
+                <div class="form-group">
+                    <label>الاسم</label>
+                    <input type="text" name="name" required placeholder="اسمك">
+                </div>
+                <div class="form-group">
+                    <label>البريد</label>
+                    <input type="email" name="email" required placeholder="بريدك">
+                </div>
+                <div class="form-group">
+                    <label>الرسالة</label>
+                    <textarea name="message" required placeholder="اكتب رسالتك..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-paper-plane"></i> إرسال
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Email Detail Modal -->
+    <div class="modal-overlay" id="emailModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-envelope"></i> تفاصيل الرسالة</h3>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMsg">تم!</span>
+    </div>
+
+    <!-- AD SLOT 5: FOOTER -->
+    <div class="ad-section ad-footer">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:728px;height:90px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXXXXX"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div>
+            <a href="#" onclick="showPage('home')">الرئيسية</a>
+            <a href="#" onclick="showPage('privacy')">الخصوصية</a>
+            <a href="#" onclick="showPage('contact')">اتصل بنا</a>
+        </div>
+        <p style="margin-top: 1rem; color: #64748b; font-size: 0.85rem;">
+            © 2026 NexMail - بريد مؤقت مجاني
+        </p>
+    </footer>
+
+    <script>
+        // ═══════════════════════════════════════════════════════
+        // PAGE NAVIGATION
+        // ═══════════════════════════════════════════════════════
+        
+        function showPage(pageName) {
+            document.querySelectorAll('.page-section, .content-page').forEach(page => {
+                page.classList.remove('active');
+                if (page.classList.contains('page-section')) {
+                    page.style.display = 'none';
+                }
+            });
+            
+            const selected = document.getElementById(`page-${pageName}`);
+            if (selected) {
+                if (pageName === 'home') {
+                    selected.style.display = 'block';
+                } else {
+                    selected.classList.add('active');
+                }
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('navLinks').classList.remove('show');
+        }
+
+        function toggleMobileNav() {
+            document.getElementById('navLinks').classList.toggle('show');
+        }
+
+        function handleContact(e) {
+            e.preventDefault();
+            showToast('تم إرسال رسالتك!');
+            e.target.reset();
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // API & EMAIL MANAGEMENT
+        // ═══════════════════════════════════════════════════════
+        
+        const API_BASE = 'https://api.mail.tm';
+        let currentEmail = null;
+        let currentToken = null;
+        let refreshTimer = null;
+
+        async function api(endpoint, options = {}) {
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(currentToken && { 'Authorization': `Bearer ${currentToken}` })
+                },
+                ...options
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error);
+            }
+            
+            return response.json();
+        }
+
+        async function generateNewEmail() {
+            try {
+                document.getElementById('emailAddress').innerHTML = 
+                    '<i class="fas fa-spinner fa-spin"></i> جاري الإنشاء...';
+                
+                // Get available domain
+                const domains = await api('/domains');
+                const domain = domains['hydra:member'][0].domain;
+                
+                // Generate random credentials
+                const username = Math.random().toString(36).substring(2, 12);
+                const email = `${username}@${domain}`;
+                const password = Math.random().toString(36).substring(2, 17);
+                
+                // Create account
+                await api('/accounts', {
+                    method: 'POST',
+                    body: JSON.stringify({ address: email, password })
+                });
+                
+                // Login
+                const token = await api('/token', {
+                    method: 'POST',
+                    body: JSON.stringify({ address: email, password })
+                });
+                
+                currentEmail = email;
+                currentToken = token.token;
+                
+                // Save to localStorage
+                localStorage.setItem('tempEmail', JSON.stringify({
+                    email, 
+                    token: token.token, 
+                    createdAt: Date.now()
+                }));
+                
+                updateDisplay();
+                showToast('تم إنشاء بريد جديد!');
+                
+                // Load messages immediately
+                await refreshInbox();
+                
+                // Start auto-refresh
+                startAutoRefresh();
+                
+            } catch (err) {
+                console.error('Error:', err);
+                showToast('خطأ في إنشاء البريد', true);
+            }
+        }
+
+        async function loadSavedEmail() {
+            const saved = localStorage.getItem('tempEmail');
+            
+            if (!saved) {
+                await generateNewEmail();
+                return;
+            }
+            
+            try {
+                const data = JSON.parse(saved);
+                const age = Date.now() - data.createdAt;
+                
+                // If older than 1 hour, create new
+                if (age > 3600000) {
+                    localStorage.removeItem('tempEmail');
+                    await generateNewEmail();
+                    return;
+                }
+                
+                currentEmail = data.email;
+                currentToken = data.token;
+                
+                updateDisplay();
+                
+                // Load messages immediately
+                await refreshInbox();
+                
+                // Start auto-refresh
+                startAutoRefresh();
+                
+            } catch (err) {
+                await generateNewEmail();
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('emailAddress').innerHTML = `
+                <i class="fas fa-envelope"></i>
+                <span>${currentEmail}</span>
+            `;
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // INBOX - ALL MESSAGES VISIBLE
+        // ═══════════════════════════════════════════════════════
+        
+        async function refreshInbox() {
+            if (!currentToken) return;
+            
+            const btn = document.getElementById('refreshBtn');
+            btn.classList.add('spinning');
+            
+            try {
+                // Fetch ALL messages (no limit)
+                const messages = await api('/messages?page=1');
+                const emails = messages['hydra:member'] || [];
+                
+                // Render ALL messages
+                renderEmails(emails);
+                
+                // Update count
+                document.getElementById('emailCount').textContent = emails.length;
+                
+            } catch (error) {
+                console.error('Refresh error:', error);
+            } finally {
+                btn.classList.remove('spinning');
+            }
+        }
+
+        function renderEmails(emails) {
+            const container = document.getElementById('emailList');
+            
+            // Show loading if empty
+            if (!emails) {
+                container.innerHTML = `
+                    <div class="loading-state">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <p>جاري تحميل الرسائل...</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Show empty state
+            if (emails.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>الصندوق فارغ</h3>
+                        <p>انتظر وصول الرسائل... ستظهر هنا فوراً</p>
+                        <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+                            استخدم البريد في أي موقع للتسجيل
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Render ALL emails - no limit, no hidden
+            container.innerHTML = emails.map(email => {
+                const code = extractCode(email);
+                const isUnread = !email.seen;
+                
+                return `
+                    <div class="email-item ${isUnread ? 'unread' : ''}" onclick="openEmail('${email.id}')">
+                        <div class="email-item-header">
+                            <div class="sender-info">
+                                <div class="sender-avatar">
+                                    ${(email.from?.name || email.from?.address || '?').charAt(0).toUpperCase()}
+                                </div>
+                                <div class="sender-details">
+                                    <h4>${escapeHtml(email.from?.name || email.from?.address || 'غير معروف')}</h4>
+                                    <span>${escapeHtml(email.from?.address || '')}</span>
+                                </div>
+                            </div>
+                            <div class="email-time">${formatTime(email.createdAt)}</div>
+                        </div>
+                        <div class="email-subject">${escapeHtml(email.subject || 'بدون موضوع')}</div>
+                        <div class="email-preview">${escapeHtml(email.intro || 'لا يوجد معاينة')}</div>
+                        ${code ? `<span class="tag-small verification"><i class="fas fa-key"></i> ${code}</span>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function openEmail(id) {
+            try {
+                const email = await api(`/messages/${id}`);
+                const code = extractCode(email);
+                
+                document.getElementById('modalBody').innerHTML = `
+                    <div class="email-meta">
+                        <span class="email-meta-label">من:</span>
+                        <span>${escapeHtml(email.from?.name || '')} &lt;${escapeHtml(email.from?.address || '')}&gt;</span>
+                        <span class="email-meta-label">إلى:</span>
+                        <span>${escapeHtml(currentEmail)}</span>
+                        <span class="email-meta-label">الموضوع:</span>
+                        <span>${escapeHtml(email.subject || 'بدون موضوع')}</span>
+                        <span class="email-meta-label">التاريخ:</span>
+                        <span>${new Date(email.createdAt).toLocaleString('ar-SA')}</span>
+                    </div>
+                    ${code ? `
+                        <div style="text-align: center;">
+                            <p style="color: var(--gray);">رمز التحقق المكتشف:</p>
+                            <div class="verification-code">${code}</div>
+                            <button class="btn btn-primary" onclick="copyCode('${code}')">
+                                <i class="fas fa-copy"></i> نسخ الرمز
+                            </button>
+                        </div>
+                    ` : ''}
+                    <div class="email-content">
+                        ${email.html || `<pre style="white-space: pre-wrap;">${escapeHtml(email.text || '')}</pre>`}
+                    </div>
+                `;
+                
+                document.getElementById('emailModal').classList.add('active');
+                
+                // Refresh to mark as read
+                await refreshInbox();
+                
+            } catch (err) {
+                console.error('Open error:', err);
+                showToast('خطأ في فتح الرسالة', true);
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // HELPERS
+        // ═══════════════════════════════════════════════════════
+        
+        function extractCode(email) {
+            const text = (email.text || email.subject || '').toLowerCase();
+            
+            const patterns = [
+                /\b\d{4,8}\b/,
+                /code[:\s]+([a-z0-9]{4,10})/i,
+                /رمز[:\s]+(\d{4,8})/,
+                /كود[:\s]+(\d{4,8})/,
+                /otp[:\s]+(\d{4,8})/i,
+                /verification[:\s]+(\d{4,8})/i,
+            ];
+            
+            for (const p of patterns) {
+                const match = text.match(p);
+                if (match) return match[1] || match[0];
+            }
+            return null;
+        }
+
+        function formatTime(dateString) {
+            if (!dateString) return 'غير معروف';
+            
+            const date = new Date(dateString);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000);
+            
+            if (diff < 10) return 'الآن';
+            if (diff < 60) return `${diff} ثانية`;
+            if (diff < 3600) return `${Math.floor(diff / 60)} دقيقة`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} ساعة`;
+            return date.toLocaleDateString('ar-SA');
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function copyEmail() {
+            if (!currentEmail) return;
+            navigator.clipboard.writeText(currentEmail).then(() => {
+                showToast('تم نسخ العنوان!');
+            });
+        }
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('تم نسخ الرمز!');
+            });
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const icon = toast.querySelector('i');
+            const txt = document.getElementById('toastMsg');
+            
+            txt.textContent = msg;
+            toast.className = `toast ${isError ? '' : 'success'} show`;
+            
+            icon.className = isError ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+            
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function closeModal() {
+            document.getElementById('emailModal').classList.remove('active');
+        }
+
+        function startAutoRefresh() {
+            // Clear existing timer
+            if (refreshTimer) clearInterval(refreshTimer);
+            
+            // Refresh every 5 seconds
+            refreshTimer = setInterval(() => {
+                refreshInbox();
+            }, 5000);
+        }
+
+        // ═══════════════════════════════════════════════════════
+        // EVENTS & INIT
+        // ═══════════════════════════════════════════════════════
+        
+        document.getElementById('emailModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('emailModal')) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('home');
+            loadSavedEmail();
+        });
+    </script>
+</body>
+</html>
